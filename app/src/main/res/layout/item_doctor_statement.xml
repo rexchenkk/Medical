@@ -24,6 +24,7 @@
         android:background="@mipmap/doctor_statement_background"
         android:paddingHorizontal="10dp"
         android:paddingVertical="10dp"
+        android:textColor="#FF333333"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toEndOf="@id/avatar"

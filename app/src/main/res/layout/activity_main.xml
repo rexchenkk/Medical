@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="24dp"
         android:layout_marginBottom="36dp"
-        android:background="@mipmap/input_panel_background"
+        android:background="@mipmap/input_area"
         android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="parent">
 
@@ -46,17 +46,23 @@
             android:id="@+id/camera"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@mipmap/camera" />
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/content"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@null"
-            android:layout_marginStart="10dp"
+            android:background="@mipmap/input_panel_background"
+            android:layout_marginStart="8dp"
+            android:textSize="14sp"
+            android:layout_marginEnd="8dp"
+            android:textColor="#FF333333"
+            android:maxLines="3"
+            android:hint="请输入......"
+            android:textColorHint="#FF333333"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/send"
             app:layout_constraintStart_toEndOf="@id/camera"
@@ -64,10 +70,12 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/send"
+            app:layout_constraintStart_toEndOf="@id/content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginBottom="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:srcCompat="@mipmap/send_normal" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
