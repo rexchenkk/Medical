@@ -35,17 +35,22 @@ class MainActivity : AppCompatActivity() {
        Log.e(TAG, "收到消息=$data")
       ToastUtils.showToast(applicationContext, data)
       data?.let {
-        conversation.add(ConversationModel(System.currentTimeMillis(), Content.Statement(data),
-          Role.Doctor))
-        binding.conversation.adapter?.let {
-          it.notifyDataSetChanged()
-          binding.conversation.layoutManager?.scrollToPosition(it.itemCount - 1)
-        }
+        viewModel.sendToGPT(it, Role.Doctor)
       }
+
+//      data?.let {
+//        conversation.add()
+
+//        ConversationModel(System.currentTimeMillis(), Content.Statement(data),
+//          Role.Doctor)
+//      }
     }
   }
   private var conversation: List<ConversationModel> by Delegates.observable(mutableListOf()) { _, old, new ->
-    binding.conversation.adapter?.notifyDataSetChanged()
+    binding.conversation.adapter?.let {
+      it.notifyDataSetChanged()
+      binding.conversation.layoutManager?.scrollToPosition(it.itemCount - 1)
+    }
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -115,7 +120,7 @@ class MainActivity : AppCompatActivity() {
         content1
       )
       WSManager.getInstance(applicationContext).send(Gson().toJson(textData))
-      viewModel.sendToGPT(content1)
+      viewModel.sendToGPT(content1, Role.Patient)
     }
   }
 
