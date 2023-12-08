@@ -34,6 +34,14 @@ class MainActivity : AppCompatActivity() {
     override fun onWebSocketData(type: Int, data: String?) {
        Log.e(TAG, "收到消息=$data")
       ToastUtils.showToast(applicationContext, data)
+      data?.let {
+        conversation.add(ConversationModel(System.currentTimeMillis(), Content.Statement(data),
+          Role.Doctor))
+        binding.conversation.adapter?.let {
+          it.notifyDataSetChanged()
+          binding.conversation.layoutManager?.scrollToPosition(it.itemCount - 1)
+        }
+      }
     }
   }
   private var conversation: List<ConversationModel> by Delegates.observable(mutableListOf()) { _, old, new ->
@@ -88,6 +96,10 @@ class MainActivity : AppCompatActivity() {
     }
   }
 
+  override fun onResume() {
+    super.onResume()
+    WSManager.getInstance(applicationContext).connect()
+  }
   private fun sendToGPT() {
     val content = binding.content.text?.trim()
     if (content.isNullOrBlank()) {
@@ -109,8 +121,8 @@ class MainActivity : AppCompatActivity() {
 
   private fun initSocket() {
     WSManager.getInstance(applicationContext).registerWSDataListener(listener)
-//    WSManager.getInstance(applicationContext).init("ws://47.90.136.35.nip.io/chat")
-    WSManager.getInstance(applicationContext).init("ws://10.128.62.15:8000/chat")
+    WSManager.getInstance(applicationContext).init("ws://47.90.136.35.nip.io/chat")
+//    WSManager.getInstance(applicationContext).init("ws://10.128.62.15:8000/chat")
   }
 
 
