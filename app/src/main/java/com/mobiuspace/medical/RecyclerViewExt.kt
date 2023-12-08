@@ -70,7 +70,7 @@ class CommonRecyclerAdapter<T>(build: CommonRecyclerAdapter<T>.() -> Unit) :
     holder.bind(position, onItem(position), onBind)
   }
 
-  override fun getItemCount(): Int = onCount()
+  override fun getItemCount(): Int = 0
 
   override fun getItemViewType(position: Int): Int = onItemViewType(position)
 

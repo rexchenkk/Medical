@@ -5,10 +5,10 @@ plugins {
 
 android {
   namespace = "com.mobiuspace.medical"
-  compileSdk = 33
+  compileSdk = 34
 
   defaultConfig {
-    applicationId = "com.mobiuspace.medical"
+    applicationId = "com.medical.expert"
     minSdk = 24
     targetSdk = 33
     versionCode = 1
@@ -24,8 +24,8 @@ android {
     }
   }
   compileOptions {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+//    sourceCompatibility = VERSION_11
+//    targetCompatibility = VERSION_11
   }
   kotlinOptions {
     jvmTarget = "1.8"
@@ -46,4 +46,15 @@ dependencies {
   testImplementation("junit:junit:4.13.2")
   androidTestImplementation("androidx.test.ext:junit:1.1.5")
   androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+  // glide
+  implementation ("com.github.bumptech.glide:glide:4.14.2")
+  // gson
+  implementation ("com.google.code.gson:gson:2.10")
+  // picture selector
+  // 请不要跨版本升级，请先查看Kotlin版Demo
+  implementation ("io.github.lucksiege:pictureselector:v3.11.1")
+  // 图片压缩 (按需引入)
+  implementation ("io.github.lucksiege:compress:v3.11.1")
+  // okhttp
+  implementation ("com.squareup.okhttp3:okhttp:4.10.0")
 }
