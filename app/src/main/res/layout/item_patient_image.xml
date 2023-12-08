@@ -3,12 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingVertical="10dp"
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/avatar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@mipmap/patient_avatar" />
@@ -23,6 +25,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintHorizontal_bias="1"
         tools:src="@mipmap/top_logo"
+        android:paddingVertical="8dp"
+        android:background="@mipmap/patient_content_background"
         android:layout_marginStart="36dp"
         android:layout_marginEnd="18dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
