@@ -56,7 +56,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                   Role.Doctor
               )
           )).let {
-              Log.d("MainViewModel", "size: ${it.size}")
               conversation.postValue(it)
           }
       }
@@ -66,15 +65,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         val last = (conversation.value ?: emptyList()).last()
         if(((last.content) as Content.Statement).msg.isBlank()) {
             last.content = Content.Statement(statement)
-            (conversation.value ?: emptyList())
-        } else {
-            (conversation.value ?: emptyList()).plus(
-                ConversationModel(
-                    System.currentTimeMillis(),
-                    Content.Statement(statement),
-                    role
-                )
-            )
+            viewModelScope.launch(Dispatchers.IO) { conversationDao.addConversation(last) }
         }
         conversation.postValue(
             (conversation.value ?: emptyList())
@@ -88,17 +79,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     System.currentTimeMillis(),
                     Content.Statement(statement),
                     role
-                )
-            ).plus(
-                ConversationModel(
-                    System.currentTimeMillis(),
-                    Content.Statement(""),
-                    Role.Doctor
                 ).also {
                     viewModelScope.launch(Dispatchers.IO) {
                         conversationDao.addConversation(it)
                     }
                 }
+            ).plus(
+                ConversationModel(
+                    System.currentTimeMillis(),
+                    Content.Statement(""),
+                    Role.Doctor
+                )
             )
         )
     }
@@ -113,17 +104,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     System.currentTimeMillis(),
                     Content.Image(imagePath),
                     Role.Patient
-                )
-            ).plus(
-                ConversationModel(
-                    System.currentTimeMillis(),
-                    Content.Statement(""),
-                    Role.Doctor
                 ).also {
                     viewModelScope.launch(Dispatchers.IO) {
                         conversationDao.addConversation(it)
                     }
                 }
+            ).plus(
+                ConversationModel(
+                    System.currentTimeMillis(),
+                    Content.Statement(""),
+                    Role.Doctor
+                )
             )
         )
         MainScope().launch(Dispatchers.IO) {
