@@ -103,7 +103,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginBottom="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:srcCompat="@mipmap/send_normal" />
+            app:srcCompat="@drawable/send_btn" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
