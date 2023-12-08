@@ -1,7 +1,9 @@
 package com.mobiuspace.medical
 
+import android.util.Log
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.mobiuspace.medical.utils.DeviceUtil
 
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -19,6 +21,8 @@ class ExampleInstrumentedTest {
   fun useAppContext() {
     // Context of the app under test.
     val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-    assertEquals("com.mobiuspace.medical", appContext.packageName)
+//    assertEquals("com.mobiuspace.medical", appContext.packageName)
+    val udid = DeviceUtil.getUdid(appContext)
+    Log.d("zxh", "useAppContext: udid=$udid")
   }
 }

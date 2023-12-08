@@ -6,10 +6,8 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
-import androidx.arch.core.executor.ArchTaskExecutor;
 
 import com.luck.picture.lib.utils.ToastUtils;
-import com.mobiuspace.medical.application.MainApplication;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -116,13 +114,9 @@ public class WSManager {
         public void onMessage(@NotNull WebSocket webSocket, @NotNull String text) {
             super.onMessage(webSocket, text);
             Log.e(TAG, "客户端收到消息:" + text);
-
             if (text.contains("ping") || text.contains("pong")) {
-                //简易写法，是否为pong包
-                isReceivePong = true;
                 return;
             }
-
             onWSDataChanged(DATE_NORMAL, text);
         }
 
@@ -137,12 +131,6 @@ public class WSManager {
             Log.e(TAG, "连接成功！");
             ToastUtils.showToast(mContext, "连接成功！");
             mWebSocket = webSocket;
-//            //测试发消息
-//            webSocket.send("我是客户端，你好啊");
-            //主动发送心跳包
-            isReceivePong = true;
-            heartHandler.sendEmptyMessage(10);
-
         }
 
     }
@@ -154,18 +142,18 @@ public class WSManager {
     Handler heartHandler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
-            if (msg.what != 10) return false;
+//            if (msg.what != 10) return false;
 
-            final String message = "{\"action\":\"ping\"}";
-            if (isReceivePong) {
-                send(message);
-                isReceivePong = false;
-                heartHandler.sendEmptyMessageDelayed(10, 10000);
-            } else {
-                //没有收到pong命令，进行重连
-                disconnect(1001, "断线重连");
-                ToastUtils.showToast(mContext, "断线重连！");
-            }
+//            final String message = "{\"action\":\"ping\"}";
+//            if (isReceivePong) {
+//                send(message);
+//                isReceivePong = false;
+//                heartHandler.sendEmptyMessageDelayed(10, 10000);
+//            } else {
+//                //没有收到pong命令，进行重连
+//                disconnect(1001, "断线重连");
+//                ToastUtils.showToast(mContext, "断线重连！");
+//            }
             return false;
         }
     });

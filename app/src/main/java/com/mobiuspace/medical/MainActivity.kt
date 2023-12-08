@@ -101,10 +101,6 @@ class MainActivity : AppCompatActivity() {
     }
   }
 
-  override fun onResume() {
-    super.onResume()
-    WSManager.getInstance(applicationContext).connect()
-  }
   private fun sendToGPT() {
     val content = binding.content.text?.trim()
     if (content.isNullOrBlank()) {
@@ -126,7 +122,8 @@ class MainActivity : AppCompatActivity() {
 
   private fun initSocket() {
     WSManager.getInstance(applicationContext).registerWSDataListener(listener)
-    WSManager.getInstance(applicationContext).init("ws://47.90.136.35.nip.io/chat")
+    WSManager.getInstance(applicationContext).init("ws://8.217.208.220.nip.io/chat")
+//    WSManager.getInstance(applicationContext).init("ws://47.90.136.35.nip.io/chat")
 //    WSManager.getInstance(applicationContext).init("ws://10.128.62.15:8000/chat")
   }
 
