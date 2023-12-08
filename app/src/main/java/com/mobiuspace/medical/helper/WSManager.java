@@ -107,6 +107,7 @@ public class WSManager {
             super.onFailure(webSocket, t, response);
             Log.e(TAG, "onFailure！" + t.getMessage());
             ToastUtils.showToast(mContext, "onFailure！");
+            onWSDataChanged(DATE_NORMAL, "华佗在忙，请稍后重试！");
             connect();
         }
 

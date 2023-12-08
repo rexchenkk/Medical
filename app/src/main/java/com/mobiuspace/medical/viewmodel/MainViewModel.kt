@@ -34,6 +34,25 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         mutableListOf()
     )
 
+    fun receiveFromGPT(statement: String, role: Role) {
+        val last = (conversation.value ?: emptyList()).last()
+        if(((last.content) as Content.Statement).msg.isBlank()) {
+            last.content = Content.Statement(statement)
+            (conversation.value ?: emptyList())
+        } else {
+            (conversation.value ?: emptyList()).plus(
+                ConversationModel(
+                    System.currentTimeMillis(),
+                    Content.Statement(statement),
+                    role
+                )
+            )
+        }
+        conversation.postValue(
+            (conversation.value ?: emptyList())
+        )
+    }
+
     fun sendToGPT(statement: String, role: Role) {
         conversation.postValue(
             (conversation.value ?: emptyList()).plus(
@@ -41,6 +60,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     System.currentTimeMillis(),
                     Content.Statement(statement),
                     role
+                )
+            ).plus(
+                ConversationModel(
+                    System.currentTimeMillis(),
+                    Content.Statement(""),
+                    Role.Doctor
                 )
             )
         )
@@ -56,6 +81,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     System.currentTimeMillis(),
                     Content.Image(imagePath),
                     Role.Patient
+                )
+            ).plus(
+                ConversationModel(
+                    System.currentTimeMillis(),
+                    Content.Statement(""),
+                    Role.Doctor
                 )
             )
         )

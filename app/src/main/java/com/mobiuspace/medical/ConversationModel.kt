@@ -1,6 +1,6 @@
 package com.mobiuspace.medical
 
-class ConversationModel(val time: Long, val content: Content, val owner: Role) {
+class ConversationModel(val time: Long, var content: Content, val owner: Role) {
 }
 
 fun ConversationModel.toViewType(): Int = when {

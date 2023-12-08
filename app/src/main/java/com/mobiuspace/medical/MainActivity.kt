@@ -31,10 +31,9 @@ class MainActivity : AppCompatActivity() {
   private lateinit var binding: ActivityMainBinding
   private val listener = object : WebSocketDataListener {
     override fun onWebSocketData(type: Int, data: String?) {
-       Log.e(TAG, "收到消息=$data")
-      ToastUtils.showToast(applicationContext, data)
+      Log.e(TAG, "收到消息=$data")
       data?.let {
-        viewModel.sendToGPT(it, Role.Doctor)
+        viewModel.receiveFromGPT(it, Role.Doctor)
       }
     }
   }
@@ -77,6 +76,7 @@ class MainActivity : AppCompatActivity() {
         }
       }
     }
+    (binding.conversation.layoutManager as LinearLayoutManager).stackFromEnd = true
     binding.camera.setOnClickListener {
       openPictureSelector()
     }

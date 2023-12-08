@@ -3,8 +3,10 @@ package com.mobiuspace.medical
 import android.app.Activity
 import android.net.Uri
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.wgw.photo.preview.PhotoPreview
 
@@ -17,8 +19,21 @@ object ViewType {
 class DoctorResponseViewHolder(private val view: View) :
   CommonViewHolder<ConversationModel>(view, ViewType.DoctorStatement) {
   override fun onBind(position: Int, viewType: Int, item: ConversationModel) {
-    itemView.findViewById<TextView>(R.id.statement)?.apply {
-      text = (item.content as Content.Statement).msg
+    val statement = itemView.findViewById<TextView>(R.id.statement)
+    val loading = itemView.findViewById<ImageView>(R.id.loading)
+    val msg = (item.content as Content.Statement).msg
+    if (msg.isBlank()) {
+      statement.isVisible = false
+      loading.isVisible = true
+      Glide.with(loading)
+        .load(R.mipmap.ic_loading)
+        .into(loading)
+    } else {
+      loading.isVisible = false
+      statement?.isVisible = true
+      statement?.apply {
+        text = msg
+      }
     }
   }
 }

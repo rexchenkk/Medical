@@ -31,4 +31,15 @@
         app:layout_constraintTop_toTopOf="@id/avatar"
         app:layout_constraintWidth_default="wrap"
         tools:text="AsdjaskdjskdjakAsdjaskdjskdjakAsdjasAsdjaskdjskdjakAsdjaskdjskdjakAsdjasAsdjaskdjskdjakAsdjaskdjskdjakAsdjas" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/loading"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:scaleType="fitCenter"
+        app:layout_constraintStart_toEndOf="@id/avatar"
+        app:layout_constraintTop_toTopOf="@id/avatar"
+        app:layout_constraintBottom_toBottomOf="@id/avatar"
+        android:layout_marginStart="18dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
