@@ -1,6 +1,4 @@
 package com.mobiuspace.medical
-
-import android.util.Log
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -13,7 +11,7 @@ class ConversationModel(
   @ColumnInfo(name = "time")
   val time: Long,
   @ColumnInfo(name = "content")
-  val content: Content,
+  var content: Content,
   @ColumnInfo(name = "owner")
   val owner: Role,
   @PrimaryKey(autoGenerate = true)

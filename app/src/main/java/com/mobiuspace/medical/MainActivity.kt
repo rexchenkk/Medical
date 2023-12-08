@@ -23,7 +23,6 @@ import com.mobiuspace.medical.helper.WSManager.WebSocketDataListener
 import com.mobiuspace.medical.utils.DeviceUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import kotlin.properties.Delegates
 
 class MainActivity : AppCompatActivity() {
@@ -32,18 +31,10 @@ class MainActivity : AppCompatActivity() {
   private lateinit var binding: ActivityMainBinding
   private val listener = object : WebSocketDataListener {
     override fun onWebSocketData(type: Int, data: String?) {
-       Log.e(TAG, "收到消息=$data")
-      ToastUtils.showToast(applicationContext, data)
+      Log.e(TAG, "收到消息=$data")
       data?.let {
-        viewModel.sendToGPT(it, Role.Doctor)
+        viewModel.receiveFromGPT(it, Role.Doctor)
       }
-
-//      data?.let {
-//        conversation.add()
-
-//        ConversationModel(System.currentTimeMillis(), Content.Statement(data),
-//          Role.Doctor)
-//      }
     }
   }
   private var conversation: List<ConversationModel> by Delegates.observable(mutableListOf()) { _, old, new ->
@@ -85,6 +76,7 @@ class MainActivity : AppCompatActivity() {
         }
       }
     }
+    (binding.conversation.layoutManager as LinearLayoutManager).stackFromEnd = true
     binding.camera.setOnClickListener {
       openPictureSelector()
     }
@@ -101,10 +93,6 @@ class MainActivity : AppCompatActivity() {
     }
   }
 
-  override fun onResume() {
-    super.onResume()
-    WSManager.getInstance(applicationContext).connect()
-  }
   private fun sendToGPT() {
     val content = binding.content.text?.trim()
     if (content.isNullOrBlank()) {
@@ -126,7 +114,8 @@ class MainActivity : AppCompatActivity() {
 
   private fun initSocket() {
     WSManager.getInstance(applicationContext).registerWSDataListener(listener)
-    WSManager.getInstance(applicationContext).init("ws://47.90.136.35.nip.io/chat")
+    WSManager.getInstance(applicationContext).init("ws://8.217.208.220.nip.io/chat")
+//    WSManager.getInstance(applicationContext).init("ws://47.90.136.35.nip.io/chat")
 //    WSManager.getInstance(applicationContext).init("ws://10.128.62.15:8000/chat")
   }
 

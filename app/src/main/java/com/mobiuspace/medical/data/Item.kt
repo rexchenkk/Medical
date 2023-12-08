@@ -8,5 +8,5 @@ import com.google.gson.annotations.SerializedName
  */
 data class Item(
     @SerializedName("word_name") val wordName: String,
-    @SerializedName("word") val word: String,
+    @SerializedName("word") var word: String,
 )

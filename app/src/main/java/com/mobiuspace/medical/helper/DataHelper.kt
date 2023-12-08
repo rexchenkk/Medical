@@ -88,5 +88,19 @@ object DataHelper {
         return item
     }
 
+    /**
+     * 参考区间与 result 是不同值，则把参考区间值修改为 ""
+     */
+    fun filterUnNormalRange(result: String, range: String, indicator: MutableList<Item>, ) {
+        val resultValue = result.toDoubleOrNull()
+        val rangeValue = range.toDoubleOrNull()
+        if((resultValue != null && rangeValue == null) || (resultValue == null && rangeValue != null)) {
+            indicator.find { TextUtils.equals(it.word, range) }?.let {
+                it.word = ""
+            }
+        }
+
+    }
+
 
 }

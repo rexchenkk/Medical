@@ -1,5 +1,7 @@
 package com.medical.expert.utils
 
+import com.medical.expert.data.Item
+import com.medical.expert.helper.DataHelper
 import java.util.regex.Pattern
 
 /**
@@ -46,10 +48,13 @@ object RegexUtil {
      * size -> 1, 只包含一下数值，基本上就是最高值
      * size -> 2, 包含两个数值，第一个是最低值，另一个是最高值
      */
-    fun isInRange(result: String, range: String): Boolean {
+    fun isInRange(result: String, range: String, indicator: MutableList<Item>): Boolean {
         val rangeList = getRange(range)
         when (rangeList.size) {
-            0 -> return isContainEach(range, result)
+            0 -> {
+                DataHelper.filterUnNormalRange(result, range, indicator)
+                return isContainEach(range, result)
+            }
             1 -> {
                 getResult(result)?.let {
                     return it <= rangeList[0]
