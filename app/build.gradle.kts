@@ -57,4 +57,5 @@ dependencies {
   implementation ("io.github.lucksiege:compress:v3.11.1")
   // okhttp
   implementation ("com.squareup.okhttp3:okhttp:4.10.0")
+  implementation("com.github.wanggaowan:PhotoPreview:2.4.7")
 }

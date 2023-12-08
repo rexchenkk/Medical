@@ -3,6 +3,7 @@ pluginManagement {
     google()
     mavenCentral()
     gradlePluginPortal()
+    maven("https://www.jitpack.io")
   }
 }
 dependencyResolutionManagement {
@@ -10,6 +11,8 @@ dependencyResolutionManagement {
   repositories {
     google()
     mavenCentral()
+    maven("https://www.jitpack.io")
+
   }
 }
 

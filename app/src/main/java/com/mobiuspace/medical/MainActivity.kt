@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
         onCreateViewHolder { view, viewType ->
           when(viewType) {
             ViewType.PatientStatement -> PatientStatementViewHolder(view)
-            ViewType.PatientPicture -> PatientPictureViewHolder(view)
+            ViewType.PatientPicture -> PatientPictureViewHolder(this@MainActivity, view)
             ViewType.DoctorStatement -> DoctorResponseViewHolder(view)
             else -> throw IllegalArgumentException("Invalid view type!")
           }
