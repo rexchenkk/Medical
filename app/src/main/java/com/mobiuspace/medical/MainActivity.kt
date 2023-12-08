@@ -23,7 +23,6 @@ import com.mobiuspace.medical.helper.WSManager.WebSocketDataListener
 import com.mobiuspace.medical.utils.DeviceUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import kotlin.properties.Delegates
 
 class MainActivity : AppCompatActivity() {
@@ -37,13 +36,6 @@ class MainActivity : AppCompatActivity() {
       data?.let {
         viewModel.sendToGPT(it, Role.Doctor)
       }
-
-//      data?.let {
-//        conversation.add()
-
-//        ConversationModel(System.currentTimeMillis(), Content.Statement(data),
-//          Role.Doctor)
-//      }
     }
   }
   private var conversation: List<ConversationModel> by Delegates.observable(mutableListOf()) { _, old, new ->

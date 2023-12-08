@@ -3,7 +3,6 @@ package com.medical.expert.viewmodel
 import android.app.Application
 import android.text.TextUtils
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.luck.picture.lib.utils.ToastUtils
@@ -160,6 +159,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             indicator.find { TextUtils.equals(it.wordName, IndicatorKey.RANGE.keyName) }?.word
         result?: return false
         range?: return false
-        return !RegexUtil.isInRange(result, range)
+        return !RegexUtil.isInRange(result, range, indicator)
     }
 }
