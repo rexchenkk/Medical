@@ -6,5 +6,6 @@ package com.mobiuspace.medical.data.key
  */
 enum class DataType {
     INDICATOR,  // 指标类
-    INFO  // 基本诊断报告信息
+    INFO,  // 基本诊断报告信息
+    TEXT  // 文本
 }

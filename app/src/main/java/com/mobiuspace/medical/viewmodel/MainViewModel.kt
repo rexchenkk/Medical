@@ -16,6 +16,7 @@ import com.medical.expert.helper.DataHelper
 import com.medical.expert.helper.RequestHelper
 import com.medical.expert.utils.RegexUtil
 import com.mobiuspace.medical.data.key.DataType
+import com.mobiuspace.medical.utils.DeviceUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -33,6 +34,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     // 诊断报告:RequestHelper.HEALTH_REPORT,
     fun fetchMedicalResult(imagePath: String) {
         MainScope().launch(Dispatchers.IO) {
+            val deviceId = DeviceUtil.getUdid(getApplication())
             var result = RequestHelper.doMedicalRequest(
                 getApplication<Application>().applicationContext,
                 RequestHelper.MEDICAL_REPORT_DETECTION,
@@ -40,7 +42,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             )
             if (haveMedicalIndicators(result)) {
                 val dealResult = dealResult(RequestHelper.MEDICAL_REPORT_DETECTION, result)
-                val resultData = ResultData(0, "111", dealResult)
+                val resultData = ResultData(DataType.INDICATOR.ordinal, deviceId, dealResult)
                 data.postValue(Gson().toJson(resultData))
                 return@launch
             }
@@ -58,7 +60,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 return@launch
             }
             val dealResult = dealResult(RequestHelper.HEALTH_REPORT, result)
-            val resultData = ResultData(0, "111", dealResult)
+            val resultData = ResultData(DataType.INFO.ordinal, deviceId, dealResult)
             data.postValue(Gson().toJson(resultData))
         }
     }

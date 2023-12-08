@@ -85,7 +85,7 @@ public class WSManager {
         @Override
         public void onClosed(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
             super.onClosed(webSocket, code, reason);
-            Log.e(TAG, "onClosed！");
+            Log.e(TAG, "onClosed！code=" + code  + ", reason=" + reason);
             //断线重连
             if (code == 1001) {
                 Log.e(TAG, "断线重连！");
@@ -110,7 +110,7 @@ public class WSManager {
             super.onMessage(webSocket, text);
             Log.e(TAG, "客户端收到消息:" + text);
 
-            if (text.contains("pong")) {
+            if (text.contains("ping") || text.contains("pong")) {
                 //简易写法，是否为pong包
                 isReceivePong = true;
                 return;
@@ -128,11 +128,9 @@ public class WSManager {
         public void onOpen(@NotNull WebSocket webSocket, @NotNull Response response) {
             super.onOpen(webSocket, response);
             Log.e(TAG, "连接成功！");
-
             mWebSocket = webSocket;
-            //测试发消息
-            webSocket.send("我是客户端，你好啊");
-
+//            //测试发消息
+//            webSocket.send("我是客户端，你好啊");
             //主动发送心跳包
             isReceivePong = true;
             heartHandler.sendEmptyMessage(10);

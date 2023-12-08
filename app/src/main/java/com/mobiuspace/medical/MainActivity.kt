@@ -4,18 +4,26 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
 import com.luck.picture.lib.basic.PictureSelector
 import com.luck.picture.lib.config.SelectMimeType
 import com.luck.picture.lib.config.SelectModeConfig
 import com.luck.picture.lib.entity.LocalMedia
 import com.luck.picture.lib.interfaces.OnResultCallbackListener
 import com.luck.picture.lib.utils.ToastUtils
+import com.medical.expert.data.ResultData
+import com.medical.expert.data.ResultTextData
 import com.medical.expert.viewmodel.MainViewModel
+import com.mobiuspace.medical.data.key.DataType
 import com.mobiuspace.medical.databinding.ActivityMainBinding
 import com.mobiuspace.medical.glide.GlideEngine
 import com.mobiuspace.medical.helper.WSManager
 import com.mobiuspace.medical.helper.WSManager.WebSocketDataListener
+import com.mobiuspace.medical.utils.DeviceUtil
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
   private val TAG = "MainActivity"
@@ -24,6 +32,7 @@ class MainActivity : AppCompatActivity() {
   private val listener = object : WebSocketDataListener {
     override fun onWebSocketData(type: Int, data: String?) {
        Log.e(TAG, "收到消息=$data")
+      ToastUtils.showToast(applicationContext, data)
     }
   }
   private var conversation: List<ConversationModel> = mutableListOf()
@@ -62,9 +71,30 @@ class MainActivity : AppCompatActivity() {
     binding.camera.setOnClickListener {
       openPictureSelector()
     }
+    binding.send.setOnClickListener {
+      // 发送消息
+      sendToGPT()
+    }
     viewModel.data.observe(this) {
       WSManager.getInstance(applicationContext).send(it)
       Log.d(TAG, "onCreate: resultJson=${it}")
+    }
+  }
+
+  private fun sendToGPT() {
+    val content = binding.content.text?.trim()
+    if (content.isNullOrBlank()) {
+      return
+    }
+    Log.d(TAG, "onCreate: 发送了-$content")
+    binding.content.setText("")
+    lifecycleScope.launch(Dispatchers.IO) {
+      val textData = ResultTextData(
+        DataType.TEXT.ordinal,
+        DeviceUtil.getAndroidId(applicationContext),
+        content.toString()
+      )
+      WSManager.getInstance(applicationContext).send(Gson().toJson(textData))
     }
   }
 
@@ -92,8 +122,9 @@ class MainActivity : AppCompatActivity() {
       })
   }
 
+
   override fun onDestroy() {
-    WSManager.getInstance(applicationContext).disconnect(1000, "页面销毁")
+    WSManager.getInstance(applicationContext).disconnect(2222, "页面销毁")
     WSManager.getInstance(applicationContext).unregisterWSDataListener(listener)
     Log.d(TAG, "onDestroy: ----")
     super.onDestroy()

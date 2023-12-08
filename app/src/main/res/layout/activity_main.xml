@@ -52,9 +52,11 @@
             app:srcCompat="@mipmap/camera" />
 
         <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/content"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@null"
+            android:layout_marginStart="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/send"
             app:layout_constraintStart_toEndOf="@id/camera"

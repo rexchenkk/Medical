@@ -8,8 +8,8 @@ package com.medical.expert.data.key
 enum class CommonDataKey(val keyName: String) {
     SEX("性别"),
     AGE("年龄"),
-    REPORT_NAME("报告名称"),
-    REPORT_DETECT_NAME("报告单名称"),
+//    REPORT_NAME("报告名称"),
+//    REPORT_DETECT_NAME("报告单名称"),
     DIAGNOSIS("临床诊断"),
     DIAGNOSIS_METHOD("检查方法"),
     DIAGNOSIS_RESULT("检查所见"),
