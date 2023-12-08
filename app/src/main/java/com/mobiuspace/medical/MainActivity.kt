@@ -5,14 +5,12 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.gson.Gson
 import com.luck.picture.lib.basic.PictureSelector
 import com.luck.picture.lib.config.SelectMimeType
 import com.luck.picture.lib.config.SelectModeConfig
 import com.luck.picture.lib.entity.LocalMedia
 import com.luck.picture.lib.interfaces.OnResultCallbackListener
 import com.luck.picture.lib.utils.ToastUtils
-import com.medical.expert.data.ResultData
 import com.medical.expert.viewmodel.MainViewModel
 import com.mobiuspace.medical.databinding.ActivityMainBinding
 import com.mobiuspace.medical.glide.GlideEngine
@@ -28,6 +26,7 @@ class MainActivity : AppCompatActivity() {
        Log.e(TAG, "收到消息=$data")
     }
   }
+  private var conversation: List<ConversationModel> = mutableListOf()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -38,7 +37,13 @@ class MainActivity : AppCompatActivity() {
     binding.conversation.apply {
       layoutManager = LinearLayoutManager(this@MainActivity)
       adapter = CommonRecyclerAdapter<ConversationModel> {
-
+        onCount { conversation.size }
+//        onLayout {
+//
+//        }
+//        onItemViewType {
+//          conversation.get(it)
+//        }
       }
     }
     binding.camera.setOnClickListener {
