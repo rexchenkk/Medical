@@ -70,7 +70,7 @@ public class WSManager {
         mWbSocketUrl = url;
         Log.e(TAG, "mWbSocketUrl=" + mWbSocketUrl);
         mClient = new OkHttpClient.Builder()
-                .pingInterval(10, TimeUnit.SECONDS)
+                .pingInterval(1, TimeUnit.MINUTES)
                 .build();
         connect();
     }
