@@ -44,10 +44,10 @@ class MainActivity : AppCompatActivity() {
       it.notifyDataSetChanged()
       val linearLayoutManager = binding.conversation.layoutManager as? LinearLayoutManager
       linearLayoutManager?.scrollToPosition(it.itemCount - 1)
-      if (it.itemCount > 1 && linearLayoutManager?.stackFromEnd == false ) {
-        Log.d(TAG, ": stackFromEnd-----setting--")
-        linearLayoutManager.stackFromEnd = true
-      }
+//      if (it.itemCount > 1 && linearLayoutManager?.stackFromEnd == false ) {
+//        Log.d(TAG, ": stackFromEnd-----setting--")
+//        linearLayoutManager.stackFromEnd = true
+//      }
     }
   }
 
@@ -153,9 +153,9 @@ class MainActivity : AppCompatActivity() {
 
   private fun initSocket() {
     WSManager.getInstance(applicationContext).registerWSDataListener(listener)
-//    WSManager.getInstance(applicationContext).init("ws://8.217.208.220.nip.io/chat")
+    WSManager.getInstance(applicationContext).init("ws://8.217.208.220.nip.io/chat")
 //    WSManager.getInstance(applicationContext).init("ws://47.90.136.35.nip.io/chat")
-    WSManager.getInstance(applicationContext).init("ws://10.128.62.15:8000/chat")
+//    WSManager.getInstance(applicationContext).init("ws://10.128.62.15:8000/chat")
   }
 
 

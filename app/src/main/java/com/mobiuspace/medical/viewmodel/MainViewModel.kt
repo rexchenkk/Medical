@@ -53,7 +53,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
       (conversationDao.getAllConversation().takeIf { it.isNotEmpty() } ?: mutableListOf(
         ConversationModel(
           System.currentTimeMillis(),
-          Content.Statement("有什么可以帮助你的吗？"),
+          Content.Statement("你好，我是人工智能生成的华佗医生，能够解答医疗健康问题，请问有什么可以帮到你？"),
           Role.Doctor
         ).store()
       )).let {
