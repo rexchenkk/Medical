@@ -65,6 +65,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
   }
 
   fun receiveFromGPT(statement: String, role: Role) {
+    val conversationModels = conversation.value ?: emptyList()
+    if (conversationModels.isEmpty()) {
+       return
+    }
     val last = (conversation.value ?: emptyList()).last()
     if (((last.content) as Content.Statement).msg.isBlank()) {
       last.content = Content.Statement(statement)

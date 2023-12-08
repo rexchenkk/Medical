@@ -25,7 +25,7 @@ public class DeviceUtil {
     return imei;
   }
 
-  public static String getUniquePsuedoID() {
+  private static String getUniquePsuedoID() {
     try {
       String m_szDevIDShort = "35" +
               Build.BOARD.length()%10 +
@@ -47,7 +47,7 @@ public class DeviceUtil {
     }
   }
 
-  public static String getImei(Context context) {
+  private static String getImei(Context context) {
     try {
       TelephonyManager telephonyManager = (TelephonyManager) context
               .getSystemService(Context.TELEPHONY_SERVICE);
@@ -62,7 +62,7 @@ public class DeviceUtil {
   /**
    * 获取手机IMSI
    */
-  public static String getImsi(Context context) {
+  private static String getImsi(Context context) {
     try {
       TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context
               .TELEPHONY_SERVICE);
@@ -73,7 +73,7 @@ public class DeviceUtil {
     }
   }
 
-  public static String getAndroidId(Context context) {
+  private static String getAndroidId(Context context) {
     try {
       return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
     } catch (Exception e) {

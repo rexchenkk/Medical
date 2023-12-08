@@ -107,10 +107,12 @@ class MainActivity : AppCompatActivity() {
       val content1 = content.toString()
       val textData = ResultTextData(
         DataType.TEXT.ordinal,
-        DeviceUtil.getAndroidId(applicationContext),
+        DeviceUtil.getUdid(applicationContext),
         content1
       )
-      WSManager.getInstance(applicationContext).send(Gson().toJson(textData))
+      val toJson = Gson().toJson(textData)
+      Log.d(TAG, "sendToGPT: tojson=$toJson")
+      WSManager.getInstance(applicationContext).send(toJson)
       viewModel.sendToGPT(content1, Role.Patient)
     }
   }
