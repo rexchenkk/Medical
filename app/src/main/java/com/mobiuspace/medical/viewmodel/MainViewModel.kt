@@ -3,6 +3,7 @@ package com.medical.expert.viewmodel
 import android.app.Application
 import android.text.TextUtils
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.luck.picture.lib.utils.ToastUtils
@@ -15,7 +16,9 @@ import com.medical.expert.data.ResultData
 import com.medical.expert.helper.DataHelper
 import com.medical.expert.helper.RequestHelper
 import com.medical.expert.utils.RegexUtil
+import com.mobiuspace.medical.Content
 import com.mobiuspace.medical.ConversationModel
+import com.mobiuspace.medical.Role
 import com.mobiuspace.medical.data.key.DataType
 import com.mobiuspace.medical.utils.DeviceUtil
 import kotlinx.coroutines.Dispatchers
@@ -27,13 +30,36 @@ import kotlinx.coroutines.launch
  * @date 2023/12/08 11:49 AM
  */
 class MainViewModel(application: Application) : AndroidViewModel(application) {
-
     val data = MutableLiveData<String>()
+    val conversation: MutableLiveData<List<ConversationModel>> = MutableLiveData(
+        mutableListOf()
+    )
+
+    fun sendToGPT(statement: String) {
+        conversation.postValue(
+            (conversation.value ?: emptyList()).plus(
+                ConversationModel(
+                    System.currentTimeMillis(),
+                    Content.Statement(statement),
+                    Role.Patient
+                )
+            )
+        )
+    }
 
     // ocr 识别报告，先识别检验单，如果没有指标相关信息，再去识别c
     // 检验单:RequestHelper.MEDICAL_REPORT_DETECTION
     // 诊断报告:RequestHelper.HEALTH_REPORT,
     fun fetchMedicalResult(imagePath: String) {
+        conversation.postValue(
+            (conversation.value ?: emptyList()).plus(
+                ConversationModel(
+                    System.currentTimeMillis(),
+                    Content.Image(imagePath),
+                    Role.Patient
+                )
+            )
+        )
         MainScope().launch(Dispatchers.IO) {
             val deviceId = DeviceUtil.getUdid(getApplication())
             var result = RequestHelper.doMedicalRequest(
@@ -136,5 +162,4 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         range?: return false
         return !RegexUtil.isInRange(result, range)
     }
-
 }

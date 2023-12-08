@@ -1,7 +1,10 @@
 package com.mobiuspace.medical
 
+import android.net.Uri
 import android.view.View
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatImageView
+import com.bumptech.glide.Glide
 
 object ViewType {
   const val DoctorStatement = 0
@@ -21,7 +24,11 @@ class DoctorResponseViewHolder(private val view: View) :
 class PatientPictureViewHolder(private val view: View) :
   CommonViewHolder<ConversationModel>(view, ViewType.DoctorStatement) {
   override fun onBind(position: Int, viewType: Int, item: ConversationModel) {
-    TODO("Not yet implemented")
+    itemView.findViewById<AppCompatImageView>(R.id.image)?.apply {
+      (item.content as Content.Image).let {
+        Glide.with(this).load(Uri.parse(it.path)).override(600, 600).into(this)
+      }
+    }
   }
 }
 

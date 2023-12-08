@@ -24,6 +24,7 @@ import com.mobiuspace.medical.utils.DeviceUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.properties.Delegates
 
 class MainActivity : AppCompatActivity() {
   private val TAG = "MainActivity"
@@ -35,7 +36,9 @@ class MainActivity : AppCompatActivity() {
       ToastUtils.showToast(applicationContext, data)
     }
   }
-  private var conversation: MutableList<ConversationModel> = mutableListOf()
+  private var conversation: List<ConversationModel> by Delegates.observable(mutableListOf()) { _, old, new ->
+    binding.conversation.adapter?.notifyDataSetChanged()
+  }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -80,6 +83,9 @@ class MainActivity : AppCompatActivity() {
       WSManager.getInstance(applicationContext).send(it)
       Log.d(TAG, "onCreate: resultJson=${it}")
     }
+    viewModel.conversation.observe(this) {
+      conversation = it
+    }
   }
 
   private fun sendToGPT() {
@@ -97,11 +103,7 @@ class MainActivity : AppCompatActivity() {
         content1
       )
       WSManager.getInstance(applicationContext).send(Gson().toJson(textData))
-      conversation.add(ConversationModel(System.currentTimeMillis(), Content.Statement(content1),
-        Role.Patient))
-      withContext(Dispatchers.Main) {
-        binding.conversation.adapter?.notifyDataSetChanged()
-      }
+      viewModel.sendToGPT(content1)
     }
   }
 
