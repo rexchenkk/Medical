@@ -14,27 +14,28 @@ import com.luck.picture.lib.entity.LocalMedia
 import com.luck.picture.lib.interfaces.OnResultCallbackListener
 import com.luck.picture.lib.utils.ToastUtils
 import com.medical.expert.data.ResultTextData
-import com.medical.expert.viewmodel.MainViewModel
+import com.mobiuspace.medical.viewmodel.MainViewModel
 import com.mobiuspace.medical.data.key.DataType
 import com.mobiuspace.medical.databinding.ActivityMainBinding
 import com.mobiuspace.medical.glide.GlideEngine
 import com.mobiuspace.medical.helper.WSManager
 import com.mobiuspace.medical.helper.WSManager.WebSocketDataListener
 import com.mobiuspace.medical.utils.DeviceUtil
+import com.mobiuspace.medical.utils.transparentNavBar
+import com.mobiuspace.medical.utils.transparentStatusBar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.properties.Delegates
+
 
 class MainActivity : AppCompatActivity() {
   private val TAG = "MainActivity"
   private lateinit var viewModel: MainViewModel
   private lateinit var binding: ActivityMainBinding
-  private val listener = object : WebSocketDataListener {
-    override fun onWebSocketData(type: Int, data: String?) {
-      Log.e(TAG, "收到消息=$data")
-      data?.let {
-        viewModel.receiveFromGPT(it, Role.Doctor)
-      }
+  private val listener = WebSocketDataListener { _, data ->
+    Log.e(TAG, "收到消息=$data")
+    data?.let {
+      viewModel.receiveFromGPT(it, Role.Doctor)
     }
   }
   private var conversation: List<ConversationModel> by Delegates.observable(mutableListOf()) { _, old, new ->
@@ -46,6 +47,8 @@ class MainActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    transparentStatusBar()
+    transparentNavBar()
     binding = ActivityMainBinding.inflate(layoutInflater)
     setContentView(binding.root)
     initSocket()
