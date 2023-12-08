@@ -41,7 +41,11 @@ class MainActivity : AppCompatActivity() {
   private var conversation: List<ConversationModel> by Delegates.observable(mutableListOf()) { _, old, new ->
     binding.conversation.adapter?.let {
       it.notifyDataSetChanged()
-      binding.conversation.layoutManager?.scrollToPosition(it.itemCount - 1)
+      val linearLayoutManager = binding.conversation.layoutManager as? LinearLayoutManager
+      linearLayoutManager?.scrollToPosition(it.itemCount - 1)
+      if (it.itemCount > 3 && linearLayoutManager?.stackFromEnd == false ) {
+        linearLayoutManager.stackFromEnd = true
+      }
     }
   }
 
@@ -79,7 +83,6 @@ class MainActivity : AppCompatActivity() {
         }
       }
     }
-    (binding.conversation.layoutManager as LinearLayoutManager).stackFromEnd = true
     binding.camera.setOnClickListener {
       openPictureSelector()
     }
