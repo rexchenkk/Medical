@@ -3,6 +3,7 @@ package com.mobiuspace.medical
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -43,7 +44,8 @@ class MainActivity : AppCompatActivity() {
       it.notifyDataSetChanged()
       val linearLayoutManager = binding.conversation.layoutManager as? LinearLayoutManager
       linearLayoutManager?.scrollToPosition(it.itemCount - 1)
-      if (it.itemCount > 3 && linearLayoutManager?.stackFromEnd == false ) {
+      if (it.itemCount > 1 && linearLayoutManager?.stackFromEnd == false ) {
+        Log.d(TAG, ": stackFromEnd-----setting--")
         linearLayoutManager.stackFromEnd = true
       }
     }
@@ -83,7 +85,9 @@ class MainActivity : AppCompatActivity() {
         }
       }
     }
+    (binding.conversation.layoutManager as LinearLayoutManager).stackFromEnd = true
     binding.camera.setOnClickListener {
+      viewModel.dataType.value = DataType.TEXT
       openPictureSelector()
     }
     binding.send.setOnClickListener {
@@ -102,6 +106,28 @@ class MainActivity : AppCompatActivity() {
     viewModel.conversation.observe(this) {
       conversation = it
     }
+    viewModel.dataType.observe(this) {
+      binding.content.hint = viewModel.getHint(it)
+      val tagString = viewModel.getTagString(it)
+      binding.tagContainer.isVisible = tagString.isNotBlank()
+      binding.tag.text = tagString
+    }
+    initPanelEvent()
+  }
+
+  private fun initPanelEvent() {
+    binding.tagClose.setOnClickListener{
+      viewModel.dataType.value = DataType.TEXT
+    }
+    binding.medical.setOnClickListener {
+      viewModel.dataType.value = DataType.MEDICAL
+    }
+    binding.hospital.setOnClickListener {
+      viewModel.dataType.value = DataType.HOSPITAL
+    }
+    binding.food.setOnClickListener {
+      viewModel.dataType.value = DataType.FOOD
+    }
   }
 
   private fun sendToGPT() {
@@ -114,7 +140,7 @@ class MainActivity : AppCompatActivity() {
     lifecycleScope.launch(Dispatchers.IO) {
       val content1 = content.toString()
       val textData = ResultTextData(
-        DataType.TEXT.ordinal,
+        viewModel.dataType.value?.ordinal ?: DataType.TEXT.ordinal,
         DeviceUtil.getUdid(applicationContext),
         content1
       )
@@ -127,9 +153,9 @@ class MainActivity : AppCompatActivity() {
 
   private fun initSocket() {
     WSManager.getInstance(applicationContext).registerWSDataListener(listener)
-    WSManager.getInstance(applicationContext).init("ws://8.217.208.220.nip.io/chat")
+//    WSManager.getInstance(applicationContext).init("ws://8.217.208.220.nip.io/chat")
 //    WSManager.getInstance(applicationContext).init("ws://47.90.136.35.nip.io/chat")
-//    WSManager.getInstance(applicationContext).init("ws://10.128.62.15:8000/chat")
+    WSManager.getInstance(applicationContext).init("ws://10.128.62.15:8000/chat")
   }
 
 

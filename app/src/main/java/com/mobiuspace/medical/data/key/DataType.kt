@@ -7,5 +7,8 @@ package com.mobiuspace.medical.data.key
 enum class DataType {
     INDICATOR,  // 指标类
     INFO,  // 基本诊断报告信息
-    TEXT  // 文本
+    TEXT,  // 文本
+    MEDICAL, // 药物查询
+    HOSPITAL, // 医院推荐
+    FOOD    // 饮食建议
 }

@@ -2,6 +2,7 @@ package com.mobiuspace.medical.viewmodel
 
 import android.app.Application
 import android.text.TextUtils
+import android.widget.Switch
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -45,6 +46,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     mutableListOf()
   )
   val isLoading = MutableLiveData<Boolean>(false)
+  val dataType = MutableLiveData<DataType>(DataType.TEXT)
+
   init {
     viewModelScope.launch(Dispatchers.IO) {
       (conversationDao.getAllConversation().takeIf { it.isNotEmpty() } ?: mutableListOf(
@@ -217,5 +220,24 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     result ?: return false
     range ?: return false
     return !RegexUtil.isInRange(result, range, indicator)
+  }
+
+  fun getHint(it: DataType?): CharSequence {
+    it?: return "请输入..."
+    return when(it) {
+      DataType.MEDICAL -> "输入症状推荐可能治疗的药物"
+      DataType.HOSPITAL -> "输入疾病/科室推荐医院"
+      DataType.FOOD -> "输入疾病，获取专属饮食食谱和建议"
+      else -> "请输入..."
+    }
+  }
+  fun getTagString(it: DataType?): CharSequence {
+    it?: return ""
+    return when(it) {
+      DataType.MEDICAL -> "【药物查询】"
+      DataType.HOSPITAL -> "【医院科室推荐】"
+      DataType.FOOD -> "【饮食建议】"
+      else -> ""
+    }
   }
 }
