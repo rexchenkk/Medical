@@ -2,9 +2,12 @@ package com.medical.expert.viewmodel
 
 import android.app.Application
 import android.text.TextUtils
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import androidx.room.Room
 import com.google.gson.Gson
 import com.luck.picture.lib.utils.ToastUtils
 import com.medical.expert.data.key.IndicatorKey
@@ -17,6 +20,8 @@ import com.medical.expert.helper.DataHelper
 import com.medical.expert.helper.RequestHelper
 import com.medical.expert.utils.RegexUtil
 import com.mobiuspace.medical.Content
+import com.mobiuspace.medical.ConversationDao
+import com.mobiuspace.medical.ConversationDataBase
 import com.mobiuspace.medical.ConversationModel
 import com.mobiuspace.medical.Role
 import com.mobiuspace.medical.data.key.DataType
@@ -30,10 +35,32 @@ import kotlinx.coroutines.launch
  * @date 2023/12/08 11:49 AM
  */
 class MainViewModel(application: Application) : AndroidViewModel(application) {
+    private val conversationDao: ConversationDao by lazy {
+        Room.databaseBuilder(
+            getApplication<Application>().applicationContext,
+            ConversationDataBase::class.java,
+            "conversation"
+        ).build().conversationDao()
+    }
     val data = MutableLiveData<String>()
     val conversation: MutableLiveData<List<ConversationModel>> = MutableLiveData(
         mutableListOf()
     )
+
+    init {
+      viewModelScope.launch(Dispatchers.IO) {
+          (conversationDao.getAllConversation().takeIf { it.isNotEmpty() } ?: mutableListOf(
+              ConversationModel(
+                  System.currentTimeMillis(),
+                  Content.Statement("有什么可以帮助你的吗？"),
+                  Role.Doctor
+              )
+          )).let {
+              Log.d("MainViewModel", "size: ${it.size}")
+              conversation.postValue(it)
+          }
+      }
+    }
 
     fun sendToGPT(statement: String, role: Role) {
         conversation.postValue(
@@ -42,7 +69,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     System.currentTimeMillis(),
                     Content.Statement(statement),
                     role
-                )
+                ).also {
+                    viewModelScope.launch(Dispatchers.IO) {
+                        conversationDao.addConversation(it)
+                    }
+                }
             )
         )
     }
@@ -57,7 +88,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     System.currentTimeMillis(),
                     Content.Image(imagePath),
                     Role.Patient
-                )
+                ).also {
+                    viewModelScope.launch(Dispatchers.IO) {
+                        conversationDao.addConversation(it)
+                    }
+                }
             )
         )
         MainScope().launch(Dispatchers.IO) {

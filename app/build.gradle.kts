@@ -1,6 +1,7 @@
 plugins {
   id("com.android.application")
   id("org.jetbrains.kotlin.android")
+  id("kotlin-kapt")
 }
 
 android {
@@ -58,4 +59,6 @@ dependencies {
   // okhttp
   implementation ("com.squareup.okhttp3:okhttp:4.10.0")
   implementation("com.github.wanggaowan:PhotoPreview:2.4.7")
+  implementation("androidx.room:room-runtime:2.2.3")
+  kapt("androidx.room:room-compiler:2.2.3")
 }
