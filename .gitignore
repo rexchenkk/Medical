@@ -18,6 +18,3 @@ captures
 
 # Project exclude paths
 /.fleet/
-/composeApp/
-/gradle/
-/iosApp/
