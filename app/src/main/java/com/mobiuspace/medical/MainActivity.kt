@@ -38,12 +38,25 @@ class MainActivity : AppCompatActivity() {
       layoutManager = LinearLayoutManager(this@MainActivity)
       adapter = CommonRecyclerAdapter<ConversationModel> {
         onCount { conversation.size }
-//        onLayout {
-//
-//        }
-//        onItemViewType {
-//          conversation.get(it)
-//        }
+        onCreateViewHolder { view, viewType ->
+          when(viewType) {
+            ViewType.PatientStatement -> PatientStatementViewHolder(view)
+            ViewType.PatientPicture -> PatientPictureViewHolder(view)
+            ViewType.DoctorStatement -> DoctorResponseViewHolder(view)
+            else -> throw IllegalArgumentException("Invalid view type!")
+          }
+        }
+        onLayout {
+          when(it) {
+            ViewType.PatientStatement -> R.layout.item_patient_statement
+            ViewType.PatientPicture -> R.layout.item_patient_image
+            ViewType.DoctorStatement -> R.layout.item_doctor_statement
+            else -> throw IllegalArgumentException("Invalid view type!")
+          }
+        }
+        onItemViewType {
+          conversation[it].toViewType()
+        }
       }
     }
     binding.camera.setOnClickListener {

@@ -4,9 +4,9 @@ class ConversationModel(val time: Long, val content: Content, val owner: Role) {
 }
 
 fun ConversationModel.toViewType(): Int = when {
-  owner is Role.Doctor && content is Content.Text -> ViewType.DoctorResponse
+  owner is Role.Doctor && content is Content.Statement -> ViewType.DoctorStatement
   owner is Role.Patient && content is Content.Image -> ViewType.PatientPicture
-  owner is Role.Patient && content is Content.Text -> ViewType.PatientStatement
+  owner is Role.Patient && content is Content.Statement -> ViewType.PatientStatement
   else -> throw IllegalArgumentException("Unknown data type!")
 }
 
@@ -18,5 +18,5 @@ open class Role {
 
 open class Content {
   class Image(val path: String): Content()
-  class Text(val msg: String): Content()
+  class Statement(val msg: String): Content()
 }
