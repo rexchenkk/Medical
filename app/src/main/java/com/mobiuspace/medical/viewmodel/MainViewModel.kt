@@ -15,6 +15,7 @@ import com.medical.expert.data.ResultData
 import com.medical.expert.helper.DataHelper
 import com.medical.expert.helper.RequestHelper
 import com.medical.expert.utils.RegexUtil
+import com.mobiuspace.medical.ConversationModel
 import com.mobiuspace.medical.data.key.DataType
 import com.mobiuspace.medical.utils.DeviceUtil
 import kotlinx.coroutines.Dispatchers
@@ -103,7 +104,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     val isException = isIndicatorException(indicator)
                     // 只添加异常指标
                     if (isException) {
-                        list.add(MedicalData(DataType.INDICATOR.ordinal, indicator, isException))
+                        val filterIndicatorItem = DataHelper.filterIndicatorItem(indicator)
+                        list.add(MedicalData(DataType.INDICATOR.ordinal, filterIndicatorItem, isException))
                     }
                 }
             }

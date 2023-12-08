@@ -10,4 +10,7 @@ enum class IndicatorKey(val keyName: String) {
     RESULT("结果"),
     RANGE("参考区间"),
     UNIT("单位"),
+    DEVICE_TYPE("仪器类型"),
+    TEST_METHOD("测试方法"),
+    RESULT_TIPS("结果提示"),
 }

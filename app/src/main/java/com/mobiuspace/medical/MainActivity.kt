@@ -24,6 +24,7 @@ import com.mobiuspace.medical.helper.WSManager.WebSocketDataListener
 import com.mobiuspace.medical.utils.DeviceUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
   private val TAG = "MainActivity"
@@ -35,7 +36,7 @@ class MainActivity : AppCompatActivity() {
       ToastUtils.showToast(applicationContext, data)
     }
   }
-  private var conversation: List<ConversationModel> = mutableListOf()
+  private var conversation: MutableList<ConversationModel> = mutableListOf()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -89,12 +90,18 @@ class MainActivity : AppCompatActivity() {
     Log.d(TAG, "onCreate: 发送了-$content")
     binding.content.setText("")
     lifecycleScope.launch(Dispatchers.IO) {
+      val content1 = content.toString()
       val textData = ResultTextData(
         DataType.TEXT.ordinal,
         DeviceUtil.getAndroidId(applicationContext),
-        content.toString()
+        content1
       )
       WSManager.getInstance(applicationContext).send(Gson().toJson(textData))
+      conversation.add(ConversationModel(System.currentTimeMillis(), Content.Statement(content1),
+        Role.Patient))
+      withContext(Dispatchers.Main) {
+        binding.conversation.adapter?.notifyDataSetChanged()
+      }
     }
   }
 
@@ -124,7 +131,6 @@ class MainActivity : AppCompatActivity() {
 
 
   override fun onDestroy() {
-    WSManager.getInstance(applicationContext).disconnect(2222, "页面销毁")
     WSManager.getInstance(applicationContext).unregisterWSDataListener(listener)
     Log.d(TAG, "onDestroy: ----")
     super.onDestroy()

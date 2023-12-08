@@ -4,6 +4,7 @@ import android.text.TextUtils
 import com.medical.expert.data.Item
 import com.medical.expert.data.MedicalData
 import com.medical.expert.data.key.CommonDataKey
+import com.medical.expert.data.key.IndicatorKey
 
 /**
  * @author zengxianghui@dayuwuxian.com
@@ -67,6 +68,24 @@ object DataHelper {
             }
         }
         return false
+    }
+
+    /**
+     * 过滤一些不需要的检验单指标信息
+     */
+    fun filterIndicatorItem(item: MutableList<Item>): MutableList<Item> {
+        val iterator = item.iterator()
+        while (iterator.hasNext()) {
+            val next = iterator.next()
+            if (next.word.isBlank()
+                || TextUtils.equals(next.wordName, IndicatorKey.NAME_CODE.keyName)
+                || TextUtils.equals(next.wordName, IndicatorKey.DEVICE_TYPE.keyName)
+                || TextUtils.equals(next.wordName, IndicatorKey.TEST_METHOD.keyName)
+                || TextUtils.equals(next.wordName, IndicatorKey.RESULT_TIPS.keyName)) {
+                iterator.remove()
+            }
+        }
+        return item
     }
 
 
