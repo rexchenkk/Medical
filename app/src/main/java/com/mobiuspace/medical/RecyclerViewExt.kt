@@ -77,7 +77,7 @@ class CommonRecyclerAdapter<T>(build: CommonRecyclerAdapter<T>.() -> Unit) :
     super.onBindViewHolder(holder, position, payloads)
   }
 
-  override fun getItemCount(): Int = 0
+  override fun getItemCount(): Int = onCount()
 
   override fun getItemViewType(position: Int): Int = onItemViewType(position)
 

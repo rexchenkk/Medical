@@ -13,7 +13,6 @@ import com.luck.picture.lib.config.SelectModeConfig
 import com.luck.picture.lib.entity.LocalMedia
 import com.luck.picture.lib.interfaces.OnResultCallbackListener
 import com.luck.picture.lib.utils.ToastUtils
-import com.medical.expert.data.ResultData
 import com.medical.expert.data.ResultTextData
 import com.medical.expert.viewmodel.MainViewModel
 import com.mobiuspace.medical.data.key.DataType
@@ -64,6 +63,7 @@ class MainActivity : AppCompatActivity() {
             else -> throw IllegalArgumentException("Invalid view type!")
           }
         }
+        onItem{ conversation[it] }
         onItemViewType {
           conversation[it].toViewType()
         }
