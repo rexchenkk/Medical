@@ -34,10 +34,23 @@ class MainActivity : AppCompatActivity() {
     override fun onWebSocketData(type: Int, data: String?) {
        Log.e(TAG, "收到消息=$data")
       ToastUtils.showToast(applicationContext, data)
+      data?.let {
+        viewModel.sendToGPT(it, Role.Doctor)
+      }
+
+//      data?.let {
+//        conversation.add()
+
+//        ConversationModel(System.currentTimeMillis(), Content.Statement(data),
+//          Role.Doctor)
+//      }
     }
   }
   private var conversation: List<ConversationModel> by Delegates.observable(mutableListOf()) { _, old, new ->
-    binding.conversation.adapter?.notifyDataSetChanged()
+    binding.conversation.adapter?.let {
+      it.notifyDataSetChanged()
+      binding.conversation.layoutManager?.scrollToPosition(it.itemCount - 1)
+    }
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,6 +101,10 @@ class MainActivity : AppCompatActivity() {
     }
   }
 
+  override fun onResume() {
+    super.onResume()
+    WSManager.getInstance(applicationContext).connect()
+  }
   private fun sendToGPT() {
     val content = binding.content.text?.trim()
     if (content.isNullOrBlank()) {
@@ -103,14 +120,14 @@ class MainActivity : AppCompatActivity() {
         content1
       )
       WSManager.getInstance(applicationContext).send(Gson().toJson(textData))
-      viewModel.sendToGPT(content1)
+      viewModel.sendToGPT(content1, Role.Patient)
     }
   }
 
   private fun initSocket() {
     WSManager.getInstance(applicationContext).registerWSDataListener(listener)
-//    WSManager.getInstance(applicationContext).init("ws://47.90.136.35.nip.io/chat")
-    WSManager.getInstance(applicationContext).init("ws://10.128.62.15:8000/chat")
+    WSManager.getInstance(applicationContext).init("ws://47.90.136.35.nip.io/chat")
+//    WSManager.getInstance(applicationContext).init("ws://10.128.62.15:8000/chat")
   }
 
 

@@ -8,6 +8,7 @@ import android.util.Log;
 
 import androidx.arch.core.executor.ArchTaskExecutor;
 
+import com.luck.picture.lib.utils.ToastUtils;
 import com.mobiuspace.medical.application.MainApplication;
 
 import org.jetbrains.annotations.NotNull;
@@ -46,7 +47,10 @@ public class WSManager {
 
     private boolean isReceivePong;
 
+    private static Context mContext;
+
     public static WSManager getInstance(Context context) {
+        mContext = context;
         if (sInstance == null) {
             synchronized (WSManager.class) {
                 if (sInstance == null) {
@@ -86,6 +90,7 @@ public class WSManager {
         public void onClosed(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
             super.onClosed(webSocket, code, reason);
             Log.e(TAG, "onClosed！code=" + code  + ", reason=" + reason);
+            ToastUtils.showToast(mContext, "断线重连！" + code);
             //断线重连
             if (code == 1001) {
                 Log.e(TAG, "断线重连！");
@@ -103,6 +108,8 @@ public class WSManager {
         public void onFailure(@NotNull WebSocket webSocket, @NotNull Throwable t, @Nullable Response response) {
             super.onFailure(webSocket, t, response);
             Log.e(TAG, "onFailure！" + t.getMessage());
+            ToastUtils.showToast(mContext, "onFailure！");
+            connect();
         }
 
         @Override
@@ -128,6 +135,7 @@ public class WSManager {
         public void onOpen(@NotNull WebSocket webSocket, @NotNull Response response) {
             super.onOpen(webSocket, response);
             Log.e(TAG, "连接成功！");
+            ToastUtils.showToast(mContext, "连接成功！");
             mWebSocket = webSocket;
 //            //测试发消息
 //            webSocket.send("我是客户端，你好啊");
@@ -156,6 +164,7 @@ public class WSManager {
             } else {
                 //没有收到pong命令，进行重连
                 disconnect(1001, "断线重连");
+                ToastUtils.showToast(mContext, "断线重连！");
             }
             return false;
         }

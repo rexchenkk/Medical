@@ -35,13 +35,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         mutableListOf()
     )
 
-    fun sendToGPT(statement: String) {
+    fun sendToGPT(statement: String, role: Role) {
         conversation.postValue(
             (conversation.value ?: emptyList()).plus(
                 ConversationModel(
                     System.currentTimeMillis(),
                     Content.Statement(statement),
-                    Role.Patient
+                    role
                 )
             )
         )
