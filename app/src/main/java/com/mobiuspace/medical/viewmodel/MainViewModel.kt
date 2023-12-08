@@ -44,7 +44,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
   val conversation: MutableLiveData<List<ConversationModel>> = MutableLiveData(
     mutableListOf()
   )
-
+  val isLoading = MutableLiveData<Boolean>(false)
   init {
     viewModelScope.launch(Dispatchers.IO) {
       (conversationDao.getAllConversation().takeIf { it.isNotEmpty() } ?: mutableListOf(
@@ -71,6 +71,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
     val last = (conversation.value ?: emptyList()).last()
     if (((last.content) as Content.Statement).msg.isBlank()) {
+      isLoading.value = false
       last.content = Content.Statement(statement)
       last.store()
     }
@@ -93,6 +94,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         )
       )
     )
+    isLoading.postValue(true)
   }
 
   // ocr 识别报告，先识别检验单，如果没有指标相关信息，再去识别c

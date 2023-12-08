@@ -84,6 +84,11 @@ class MainActivity : AppCompatActivity() {
       openPictureSelector()
     }
     binding.send.setOnClickListener {
+      // 正在 loading,提示
+      if (viewModel.isLoading.value == true) {
+        ToastUtils.showToast(applicationContext, "华佗拼命思考中,请稍等！" )
+        return@setOnClickListener
+      }
       // 发送消息
       sendToGPT()
     }
