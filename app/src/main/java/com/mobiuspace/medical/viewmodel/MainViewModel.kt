@@ -104,6 +104,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
   // 检验单:RequestHelper.MEDICAL_REPORT_DETECTION
   // 诊断报告:RequestHelper.HEALTH_REPORT,
   fun fetchMedicalResult(imagePath: String) {
+    isLoading.postValue(true)
     conversation.postValue(
       (conversation.value ?: emptyList()).plus(
         ConversationModel(
